@@ -6,6 +6,8 @@ Predbat plans; AlphaESS Local executes charge/export/freeze requests and verifie
 
 **Validation status:** simulated AlphaESS Modbus testing; no hardware compatibility certification. Install first on a test HA system or with control left disabled. Firmware and model differences require commissioning against the inverter's actual readings and behaviour. Only Modbus TCP is supported in this release, including a TCP gateway if it implements compatible register behaviour.
 
+Release acceptance: 31 real Home Assistant/controller/network-simulator checks and 23 actual Predbat planner/execution checks passed, including price-driven charge/export, read-only/Monitor cancellation and stopped-planner heartbeat expiry. Unit and independent TCP checks also passed. See [recorded evidence](docs/release-evidence.json) and [reproducible lab tools](tools/lab/README.md). Use compatible [Predbat v9.3.8-alphaess.6](https://github.com/markgraham924/batpred-alphaess/releases/tag/v9.3.8-alphaess.6).
+
 This beta requires **Home Assistant 2026.10.1 or newer** and pins the same PyModbus 3.13.1 dependency as that tested HA release. The full acceptance environment is HA Container 2026.10.1; other HA versions and physical inverter/firmware combinations have not been independently validated. It does not configure or guarantee a site/grid export cap: battery power limits are not a limit on combined PV-plus-battery grid export.
 
 ## Install

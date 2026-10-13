@@ -1,0 +1,450 @@
+{
+  "date": "2026-10-13",
+  "scope": "Independent simulated software testing; no physical inverter certification",
+  "ha": "2026.10.1",
+  "pymodbus": "3.13.1",
+  "predbat": "v9.3.8-alphaess.6",
+  "integration": "0.1.0-beta.1",
+  "source_protocol_sha256": "d98aa63ba936330b1b6cde12c1f3838d74bed8a02aa9b4d5cea20a58647cd935",
+  "unit_tests": {
+    "controller_and_planner": 39,
+    "simulator": 16,
+    "independent_tcp_assertions": 12
+  },
+  "runs": [
+    {
+      "name": "controller-e2e-liveness-final",
+      "started": "2026-10-13T13:03:44.391522+00:00",
+      "checks": [
+        {
+          "name": "disabled controller sends no dispatch",
+          "passed": true
+        },
+        {
+          "name": "charge reaches inverter",
+          "passed": true
+        },
+        {
+          "name": "charge increases SoC",
+          "passed": true
+        },
+        {
+          "name": "disable stops owned dispatch",
+          "passed": true
+        },
+        {
+          "name": "discharge exports surplus",
+          "passed": true
+        },
+        {
+          "name": "higher native reserve preserved",
+          "passed": true
+        },
+        {
+          "name": "controller never writes native reserve",
+          "passed": true
+        },
+        {
+          "name": "explicit stop releases dispatch",
+          "passed": true
+        },
+        {
+          "name": "second export starts",
+          "passed": true
+        },
+        {
+          "name": "fault removes dispatch",
+          "passed": true
+        },
+        {
+          "name": "fault stops physical battery",
+          "passed": true
+        },
+        {
+          "name": "mode19 reaches inverter and blocks charging",
+          "passed": true
+        },
+        {
+          "name": "freeze charge stop",
+          "passed": true
+        },
+        {
+          "name": "freeze export holds battery with mode2 zero power",
+          "passed": true
+        },
+        {
+          "name": "freeze export stop",
+          "passed": true
+        },
+        {
+          "name": "charge before mismatch",
+          "passed": true
+        },
+        {
+          "name": "mismatch releases owned dispatch",
+          "passed": true
+        },
+        {
+          "name": "charge before telemetry loss",
+          "passed": true
+        },
+        {
+          "name": "deadman expires without communication",
+          "passed": true
+        },
+        {
+          "name": "telemetry failure disables controller",
+          "passed": true
+        },
+        {
+          "name": "charge before inverter reboot",
+          "passed": true
+        },
+        {
+          "name": "inverter reboot is not overwritten",
+          "passed": true
+        },
+        {
+          "name": "foreign dispatch after idle arming disarms controller",
+          "passed": true
+        },
+        {
+          "name": "foreign idle command not stopped or overwritten",
+          "passed": true
+        },
+        {
+          "name": "explicit user stop can release foreign dispatch",
+          "passed": true
+        },
+        {
+          "name": "fresh planner request refuses matching foreign dispatch",
+          "passed": true
+        },
+        {
+          "name": "foreign request rejection disarms controller",
+          "passed": true
+        },
+        {
+          "name": "explicit user stop clears matching foreign dispatch",
+          "passed": true
+        },
+        {
+          "name": "HA restart returns with control disabled",
+          "passed": true
+        },
+        {
+          "name": "HA restart produces no inverter writes",
+          "passed": true
+        },
+        {
+          "name": "conservation maintained",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "planner-charge",
+      "started": "2026-10-13T13:07:59.590543+00:00",
+      "checks": [
+        {
+          "name": "real planner chooses current Chrg window",
+          "passed": true
+        },
+        {
+          "name": "initial planner read-only",
+          "passed": true
+        },
+        {
+          "name": "read-only phase has no active dispatch",
+          "passed": true
+        },
+        {
+          "name": "actual planner command produces charge power",
+          "passed": true
+        },
+        {
+          "name": "actual SoC follows charge",
+          "passed": true
+        },
+        {
+          "name": "planner reports error-free execution",
+          "passed": true
+        },
+        {
+          "name": "native reserve not changed",
+          "passed": true
+        }
+      ],
+      "physical": {
+        "soc": 55.41666666666657,
+        "battery_w": -2500,
+        "grid_w": 3000,
+        "load_w": 500,
+        "pv_w": 0,
+        "native_floor_pct": 6,
+        "dispatch": [
+          1,
+          0,
+          29500,
+          0,
+          0,
+          2,
+          250,
+          0,
+          90
+        ],
+        "conservation_error_w": 0
+      },
+      "plan_first_row": {
+        "time": "2026-10-13T14:05:00+0100",
+        "slot_minute": 840,
+        "import_rate": -100.0,
+        "export_rate": 0.0,
+        "import_rate_adjust_type": "user",
+        "import_rate_adjusted": -107.39,
+        "export_rate_adjusted": 0.0,
+        "state": "Chrg",
+        "state_target": "70",
+        "state_override": "",
+        "state_mixed": null,
+        "state_html": "Chrg&nearr;",
+        "reasons": [
+          {
+            "code": "charge_low_rate",
+            "params": {
+              "target_percent": 70,
+              "rate": "-100.00",
+              "rate_kw": "2.50"
+            }
+          }
+        ],
+        "state_text": "Chrg&nearr;",
+        "state_color": "#3AEE85",
+        "state2_text": null,
+        "state2_color": null,
+        "show_limit": "70",
+        "pv_forecast": 0.4,
+        "pv_forecast10": 0.35,
+        "pv_forecast_total": 0.4,
+        "load_forecast": 0.28,
+        "load_forecast10": 0.29,
+        "load_forecast_total": 0.28,
+        "clipped": 0,
+        "rate_color_import": "#74C1FF",
+        "rate_color_export": "#F18261",
+        "pv_color": "#FFAAAA",
+        "load_color": "#FFFF00",
+        "soc_color": "#3AEE85",
+        "cost_color": "#3AEE85",
+        "clipped_color": "#FFFFFF",
+        "extra_load": "0.21",
+        "extra_load_total": 0.21,
+        "extra_color": "#AAFFAA",
+        "soc_percent": 60,
+        "soc_change": 1.01,
+        "soc_sym": "&nearr;",
+        "cost_change": -0.95,
+        "total_cost": 0.1,
+        "rowspan_state": 0,
+        "skip_state_cell": false,
+        "rowspan_limit": 0,
+        "skip_limit_cell": false,
+        "split": false
+      },
+      "planner_status": {
+        "state": "Read-Only",
+        "error": false,
+        "last_updated": "2026-10-13T14:08:00+0100"
+      }
+    },
+    {
+      "name": "planner-export",
+      "started": "2026-10-13T13:13:15.518382+00:00",
+      "checks": [
+        {
+          "name": "real planner chooses current Exp window",
+          "passed": true
+        },
+        {
+          "name": "initial planner read-only",
+          "passed": true
+        },
+        {
+          "name": "read-only phase has no active dispatch",
+          "passed": true
+        },
+        {
+          "name": "actual planner command produces export power",
+          "passed": true
+        },
+        {
+          "name": "actual SoC follows export",
+          "passed": true
+        },
+        {
+          "name": "planner reports error-free execution",
+          "passed": true
+        },
+        {
+          "name": "native reserve not changed",
+          "passed": true
+        }
+      ],
+      "physical": {
+        "soc": 54.58333333333343,
+        "battery_w": 2500,
+        "grid_w": -2000,
+        "load_w": 500,
+        "pv_w": 0,
+        "native_floor_pct": 6,
+        "dispatch": [
+          1,
+          0,
+          34500,
+          0,
+          0,
+          2,
+          113,
+          0,
+          90
+        ],
+        "conservation_error_w": 0
+      },
+      "plan_first_row": {
+        "time": "2026-10-13T14:10:00+0100",
+        "slot_minute": 840,
+        "import_rate": 35.0,
+        "export_rate": 150.0,
+        "export_rate_adjust_type": "user",
+        "import_rate_adjusted": 37.59,
+        "export_rate_adjusted": 139.68,
+        "state": "Exp",
+        "state_target": "50",
+        "state_override": "",
+        "state_mixed": null,
+        "state_html": "Exp&searr;",
+        "reasons": [
+          {
+            "code": "export_high_rate",
+            "params": {
+              "target_percent": 50,
+              "rate": "150.00",
+              "rate_kw": "2.50"
+            }
+          }
+        ],
+        "state_text": "Exp&searr;",
+        "state_color": "#FFFF00",
+        "state2_text": null,
+        "state2_color": null,
+        "show_limit": "50",
+        "pv_forecast": 0.3,
+        "pv_forecast10": 0.3,
+        "pv_forecast_total": 0.3,
+        "load_forecast": 0.22,
+        "load_forecast10": 0.23,
+        "load_forecast_total": 0.22,
+        "clipped": 0,
+        "rate_color_import": "#3AEE85",
+        "rate_color_export": "#FFFFAA",
+        "pv_color": "#FFAAAA",
+        "load_color": "#AAFFAA",
+        "soc_color": "#3AEE85",
+        "cost_color": "#3AEE85",
+        "clipped_color": "#FFFFFF",
+        "extra_load": "0.17",
+        "extra_load_total": 0.17,
+        "extra_color": "#AAFFAA",
+        "soc_percent": 55,
+        "soc_change": -0.55,
+        "soc_sym": "&searr;",
+        "cost_change": -0.86,
+        "total_cost": 0.18,
+        "rowspan_state": 0,
+        "skip_state_cell": false,
+        "rowspan_limit": 0,
+        "skip_limit_cell": false,
+        "split": false
+      },
+      "planner_status": {
+        "state": "Read-Only",
+        "error": false,
+        "last_updated": "2026-10-13T14:13:21+0100"
+      }
+    },
+    {
+      "name": "planner-readonly",
+      "started": "2026-10-13T13:08:31.423052+00:00",
+      "checks": [
+        {
+          "name": "owned operation exists before read-only",
+          "passed": true
+        },
+        {
+          "name": "read-only stops device dispatch",
+          "passed": true
+        },
+        {
+          "name": "read-only disarms controller",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "planner-crash-check",
+      "started": "2026-10-13T13:10:25.295928+00:00",
+      "checks": [
+        {
+          "name": "stale planner stops device dispatch",
+          "passed": true
+        },
+        {
+          "name": "stale planner disarms controller",
+          "passed": true
+        },
+        {
+          "name": "stale planner receives no renewed writes",
+          "passed": true
+        }
+      ],
+      "physical": {
+        "soc": 54.58333333333343,
+        "battery_w": 500,
+        "grid_w": 0,
+        "load_w": 500,
+        "pv_w": 0,
+        "native_floor_pct": 6,
+        "dispatch": [
+          0,
+          0,
+          32000,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "conservation_error_w": 0
+      }
+    },
+    {
+      "name": "planner-monitor",
+      "started": "2026-10-13T13:14:38.200616+00:00",
+      "checks": [
+        {
+          "name": "owned operation exists before monitor",
+          "passed": true
+        },
+        {
+          "name": "monitor stops device dispatch",
+          "passed": true
+        },
+        {
+          "name": "monitor disarms controller",
+          "passed": true
+        }
+      ]
+    }
+  ]
+}
