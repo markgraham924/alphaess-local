@@ -34,7 +34,8 @@ class AlphaSensor(AlphaEntity, SensorEntity):
         elif "energy" in key or key == "battery_capacity":
             self._attr_native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
             self._attr_device_class = SensorDeviceClass.ENERGY
-            self._attr_state_class = SensorStateClass.MEASUREMENT if key == "battery_capacity" else SensorStateClass.TOTAL_INCREASING
+            if key != "battery_capacity":
+                self._attr_state_class = SensorStateClass.TOTAL_INCREASING
         elif key == "dispatch_remaining":
             self._attr_native_unit_of_measurement = "s"
 
