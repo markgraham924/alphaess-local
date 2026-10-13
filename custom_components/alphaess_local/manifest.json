@@ -1,0 +1,11 @@
+{
+  "domain": "alphaess_local",
+  "name": "AlphaESS Local",
+  "version": "0.1.0-beta.1",
+  "config_flow": true,
+  "documentation": "https://github.com/markgraham924/alphaess-local",
+  "issue_tracker": "https://github.com/markgraham924/alphaess-local/issues",
+  "codeowners": ["@markgraham924"],
+  "iot_class": "local_polling",
+  "requirements": ["pymodbus==3.13.1"]
+}

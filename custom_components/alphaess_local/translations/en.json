@@ -1,0 +1,34 @@
+{
+  "title": "AlphaESS Local",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Local AlphaESS connection",
+        "description": "Setup reads telemetry only. Control stays off until explicitly enabled. Verify register scaling against your inverter before commissioning.",
+        "data": {
+          "name": "Device name", "host": "Inverter host", "port": "Modbus TCP port", "slave": "Modbus unit/slave ID",
+          "capacity": "Usable battery capacity (kWh)", "charge_power": "Maximum charge power (W)",
+          "discharge_power": "Maximum discharge power (W)", "reserve": "Forced export reserve (%)",
+          "export_floor": "Forced export floor (%)", "reserve_scale": "Native reserve percent per register unit",
+          "soc_scale": "Dispatch target percent per register unit"
+        }
+      }
+    },
+    "error": {"cannot_connect": "Cannot read valid device registers. Check connection, unit ID and scaling."},
+    "abort": {"already_configured": "This Modbus device is already configured."}
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Battery settings",
+        "description": "Saving reloads the integration with control disabled. Native inverter reserve is never changed.",
+        "data": {
+          "capacity": "Usable battery capacity (kWh)", "charge_power": "Maximum charge power (W)",
+          "discharge_power": "Maximum discharge power (W)", "reserve": "Forced export reserve (%)",
+          "export_floor": "Forced export floor (%)", "reserve_scale": "Native reserve percent per register unit",
+          "soc_scale": "Dispatch target percent per register unit"
+        }
+      }
+    }
+  }
+}

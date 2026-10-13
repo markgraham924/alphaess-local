@@ -1,0 +1,164 @@
+force_charge:
+  name: Force charge
+  description: Bounded battery charging. Control must be enabled.
+  fields:
+    entry_id:
+      description: Required when multiple devices are installed.
+      selector:
+        text:
+    power_w:
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 30000
+          unit_of_measurement: W
+          mode: box
+    target_soc:
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: '%'
+    duration_minutes:
+      required: true
+      selector:
+        number:
+          min: 0.0167
+          max: 1440
+          mode: box
+force_export:
+  name: Force export
+  description: Bounded battery discharge; house loads consume some power and surplus exports.
+  fields:
+    entry_id:
+      selector:
+        text:
+    power_w:
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 30000
+          unit_of_measurement: W
+          mode: box
+    target_soc:
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: '%'
+    duration_minutes:
+      required: true
+      selector:
+        number:
+          min: 0.0167
+          max: 1440
+          mode: box
+stop:
+  name: Stop
+  description: Explicitly stop inverter dispatch, including external/startup dispatch while disarmed.
+  fields:
+    entry_id:
+      selector:
+        text:
+freeze_charge:
+  name: Freeze charge
+  description: Mode 19 prevents charge but can still supply house loads; model-dependent.
+  fields:
+    entry_id:
+      selector:
+        text:
+    duration_minutes:
+      required: true
+      selector:
+        number:
+          min: 0.0167
+          max: 1440
+          mode: box
+freeze_export:
+  name: Freeze export
+  description: Mode 2 with zero battery power holds battery; PV may still export.
+  fields:
+    entry_id:
+      selector:
+        text:
+    duration_minutes:
+      required: true
+      selector:
+        number:
+          min: 0.0167
+          max: 1440
+          mode: box
+charge_start:
+  name: Predbat charge start
+  fields:
+    entry_id:
+      selector:
+        text:
+    power:
+      required: true
+      selector:
+        text:
+    target_soc:
+      required: true
+      selector:
+        text:
+    end_time:
+      required: true
+      description: Local HH:MM:SS or ISO datetime with timezone.
+      selector:
+        text:
+discharge_start:
+  name: Predbat discharge start
+  fields:
+    entry_id:
+      selector:
+        text:
+    power:
+      required: true
+      selector:
+        text:
+    target_soc:
+      required: true
+      selector:
+        text:
+    end_time:
+      required: true
+      selector:
+        text:
+charge_stop:
+  name: Predbat charge stop
+  description: Stop owned charge only.
+  fields:
+    entry_id:
+      selector:
+        text:
+discharge_stop:
+  name: Predbat discharge stop
+  description: Stop owned export or freeze only.
+  fields:
+    entry_id:
+      selector:
+        text:
+mode19_start:
+  name: Predbat Mode 19 start
+  fields:
+    entry_id:
+      selector:
+        text:
+    target_soc:
+      selector:
+        text:
+    end_time:
+      required: true
+      selector:
+        text:
+mode19_stop:
+  name: Mode 19 stop
+  fields:
+    entry_id:
+      selector:
+        text:
