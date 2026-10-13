@@ -69,7 +69,7 @@ class Limits:
 
 class Controller:
     """Serialized guarded dispatch. A lease expires unless the owner is healthy."""
-    def __init__(self, transport, limits, clock=time.monotonic):
+    def __init__(self, transport, limits, clock=time.monotonic, planner_authorized=None):
         self.transport, self.limits, self.clock = transport, limits, clock
         self.enabled = False
         self.data = None
@@ -80,6 +80,14 @@ class Controller:
         self.error = None
         self.lock = asyncio.Lock()
         self.exhausted_export_until = 0
+        self.owner = None
+        self.planner_authorized = planner_authorized
+
+    def _planner_ok(self, action):
+        try:
+            return self.planner_authorized is not None and bool(self.planner_authorized(action))
+        except Exception:
+            return False
 
     async def _read(self):
         regs = {}
@@ -107,6 +115,7 @@ class Controller:
 
     async def _safe_stop(self):
         self.intent = None
+        self.owner = None
         self.enabled = False
         try:
             await self._write_verify(command("stop", 0, 0, 0))
@@ -119,6 +128,9 @@ class Controller:
         async with self.lock:
             try:
                 data = await self._read()
+                if self.intent and self.owner == "predbat" and not self._planner_ok(self.intent[0]):
+                    self.error = "Predbat missing, stale or not authorized; control disabled"
+                    await self._safe_stop()
                 if data["fault"] and not self.intent:
                     self.enabled = False
                     self.error = "Device fault or warning; control disabled"
@@ -184,7 +196,7 @@ class Controller:
                 await self._safe_stop()
             self.enabled = False
 
-    async def request(self, action, power=0, target_soc=100, duration=60, stop_if=None):
+    async def request(self, action, power=0, target_soc=100, duration=60, stop_if=None, owner="manual"):
         async with self.lock:
             # Explicit stop is permitted while disarmed, including stopping pre-existing dispatch.
             if action == "stop":
@@ -193,6 +205,7 @@ class Controller:
                 try:
                     await self._write_verify(command("stop", 0, 0, 0))
                     self.intent = None
+                    self.owner = None
                     return await self._read()
                 except Exception:
                     self.error = "Stop failed; control disabled"
@@ -200,6 +213,11 @@ class Controller:
                     raise
             if not self.enabled:
                 raise ValueError("Control is disabled; commission and enable it explicitly")
+            if owner == "predbat" and not self._planner_ok(action):
+                if self.intent and self.owner == "predbat":
+                    self.error = "Predbat missing, stale or not authorized; control disabled"
+                    await self._safe_stop()
+                raise ValueError("Predbat is missing, stale, in monitor/read-only mode, or has errors")
             if action not in ("charge", "export", "freeze_charge", "freeze_export"):
                 raise ValueError("Unsupported action")
             if not all(math.isfinite(float(x)) for x in (power, target_soc, duration)):
@@ -238,6 +256,7 @@ class Controller:
                     raise ValueError("Battery is at or below effective export floor")
             try:
                 if self.intent == (action, int(power), target_soc) and data["operating_state"] == action:
+                    self.owner = owner
                     self.end_at = self.clock() + duration
                     return data
                 if data["dispatch_active"]:
@@ -248,6 +267,7 @@ class Controller:
                 lease = min(90, int(duration))
                 await self._write_verify(command(action, int(power), target_soc, lease, self.limits.soc_scale))
                 self.intent = (action, int(power), target_soc)
+                self.owner = owner
                 self.end_at = self.clock() + duration
                 self.last_renewal = self.clock()
                 self.error = None

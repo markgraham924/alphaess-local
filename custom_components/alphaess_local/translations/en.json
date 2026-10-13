@@ -10,7 +10,9 @@
           "capacity": "Usable battery capacity (kWh)", "charge_power": "Maximum charge power (W)",
           "discharge_power": "Maximum discharge power (W)", "reserve": "Forced export reserve (%)",
           "export_floor": "Forced export floor (%)", "reserve_scale": "Native reserve percent per register unit",
-          "soc_scale": "Dispatch target percent per register unit"
+          "soc_scale": "Dispatch target percent per register unit",
+          "planner_prefix": "Predbat entity prefix (used by planner actions only)",
+          "planner_timeout": "Maximum Predbat heartbeat age (seconds)"
         }
       }
     },
@@ -26,7 +28,9 @@
           "capacity": "Usable battery capacity (kWh)", "charge_power": "Maximum charge power (W)",
           "discharge_power": "Maximum discharge power (W)", "reserve": "Forced export reserve (%)",
           "export_floor": "Forced export floor (%)", "reserve_scale": "Native reserve percent per register unit",
-          "soc_scale": "Dispatch target percent per register unit"
+          "soc_scale": "Dispatch target percent per register unit",
+          "planner_prefix": "Predbat entity prefix (used by planner actions only)",
+          "planner_timeout": "Maximum Predbat heartbeat age (seconds)"
         }
       }
     }

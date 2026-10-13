@@ -1,0 +1,6 @@
+state/
+reports/
+*.token
+*.private.*
+.venv/
+__pycache__/

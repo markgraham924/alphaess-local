@@ -1,0 +1,43 @@
+name: alphaess-release-lab
+services:
+  homeassistant:
+    build:
+      context: .
+      dockerfile: ha.Dockerfile
+    restart: unless-stopped
+    environment:
+      TZ: UTC
+    volumes:
+      - ./state/ha:/config
+      - ../../custom_components:/config/custom_components:ro
+    networks: [lab]
+    cap_drop: [ALL]
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+  alphaess-simulator:
+    build: .
+    restart: unless-stopped
+    networks: [lab]
+    cap_drop: [ALL]
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+  predbat:
+    profiles: [planner]
+    image: ${PREDBAT_LAB_IMAGE:-alphaess-lab-predbat:v9.3.8-alphaess.6}
+    restart: unless-stopped
+    environment:
+      TZ: UTC
+      PREDBAT_APPS_FILE: /config/apps.yaml
+    volumes:
+      - ./state/predbat:/config
+    networks: [lab]
+    cap_drop: [ALL]
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+networks:
+  lab:
+    name: alphaess-release-internal
+    internal: true

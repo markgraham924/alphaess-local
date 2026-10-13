@@ -39,6 +39,8 @@ async def async_setup_entry(hass, entry):
         if action != "stop":
             kwargs = dict(power=call.data.get("power_w", call.data.get("power", 0)),
                 target_soc=call.data.get("target_soc", 100), duration=call.data.get("duration_minutes", 1) * 60)
+            if call.service in ("charge_start", "discharge_start", "mode19_start"):
+                kwargs["owner"] = "predbat"
             if "end_time" in call.data:
                 end = dt_util.parse_datetime(call.data["end_time"])
                 if end is None:

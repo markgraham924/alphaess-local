@@ -18,6 +18,8 @@ def fields(defaults, connection=True):
         schema[vol.Required(key, default=defaults[key])] = vol.All(vol.Coerce(coerce), vol.Range(min=minimum, max=maximum))
     schema[vol.Required("reserve_scale", default=defaults["reserve_scale"])] = vol.In([0.1, 1.0])
     schema[vol.Required("soc_scale", default=defaults["soc_scale"])] = vol.In([0.4, 0.392])
+    schema[vol.Required("planner_prefix", default=defaults["planner_prefix"])] = vol.All(str, vol.Match(r"^[a-z][a-z0-9_]*$"))
+    schema[vol.Required("planner_timeout", default=defaults["planner_timeout"])] = vol.All(vol.Coerce(int), vol.Range(min=30, max=3600))
     return vol.Schema(schema)
 
 class AlphaFlow(config_entries.ConfigFlow, domain=DOMAIN):

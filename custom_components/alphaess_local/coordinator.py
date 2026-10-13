@@ -5,7 +5,8 @@ from homeassistant.helpers.storage import Store
 from homeassistant.util import dt as dt_util
 from .protocol import Controller, Limits
 from .transport import Transport
-from .const import DOMAIN
+from .const import DOMAIN, DEFAULTS
+from .planner import authorized
 
 ENERGY_KEYS = ("grid_import_energy", "grid_export_energy", "pv_energy", "battery_charge_energy", "battery_discharge_energy")
 
@@ -14,11 +15,21 @@ class AlphaCoordinator(DataUpdateCoordinator):
         super().__init__(hass, logging.getLogger(__name__), name=entry.title,
                          update_interval=timedelta(seconds=10))
         self.entry = entry
-        cfg = {**entry.data, **entry.options}
+        cfg = {**DEFAULTS, **entry.data, **entry.options}
+        self.planner_prefix = cfg["planner_prefix"]
+        self.planner_timeout = cfg["planner_timeout"]
         self.controller = Controller(Transport(cfg["host"], cfg["port"], cfg["slave"]),
-            Limits(**{key: cfg[key] for key in Limits.__dataclass_fields__}))
+            Limits(**{key: cfg[key] for key in Limits.__dataclass_fields__}), planner_authorized=self._planner_authorized)
         self.store = Store(hass, 1, f"{DOMAIN}.{entry.entry_id}.energy")
         self.energy = {}
+
+    def _planner_authorized(self, action):
+        prefix = self.planner_prefix
+        mode = self.hass.states.get(f"select.{prefix}_mode")
+        read_only = self.hass.states.get(f"switch.{prefix}_set_read_only")
+        status = self.hass.states.get(f"{prefix}.status")
+        return authorized(action, mode.state if mode else None, read_only.state if read_only else None,
+            status.state if status else None, status.attributes if status else {}, dt_util.utcnow(), self.planner_timeout)
 
     async def async_load(self):
         self.energy = await self.store.async_load() or {}
